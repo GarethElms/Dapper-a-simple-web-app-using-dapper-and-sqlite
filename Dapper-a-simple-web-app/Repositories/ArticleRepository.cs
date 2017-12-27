@@ -3,6 +3,8 @@ using System.Data;
 using System.Data.SQLite;
 using Dapper;
 using System.Linq;
+using System.Collections.Generic;
+using Dapper.Contrib.Extensions;
 
 namespace Dapper_SimpleWebApp
 {
@@ -15,12 +17,13 @@ namespace Dapper_SimpleWebApp
 		}
 	}
 
-	public interface IArticleRepository
+	/*public interface IArticleRepository
 	{
 		Article RetrieveById(int articleId);
-	}
+		List<Article> FetchAll();
+	}*/
 
-	public class ArticleRepository : BaseRepository, IArticleRepository
+	public class ArticleRepository : BaseRepository // , IArticleRepository
 	{
 		private IDbConnection _connection { get { return new SQLiteConnection(_connectionString); } }
 
@@ -40,6 +43,25 @@ namespace Dapper_SimpleWebApp
 				"left outer join articleTag on articleTag.articleId = article.id " + 
 				"left outer join tag on tag.id=articleTag.tagId " + 
 				"where article.id=@0 ", articleId).Single();*/
+		}
+
+		public List<Article> FetchAll()
+		{
+			var articles = _connection.Query<Article>("select * from article order by date desc").ToList();
+			return articles;
+		}
+
+		public bool Save(Article article)
+		{
+			if(article.Id == 0)
+			{
+				article.Id = _connection.Insert<Article>(article);
+			}
+			else
+			{
+				_connection.Update<Article>(article);
+			}
+			return true;
 		}
 	}
 }

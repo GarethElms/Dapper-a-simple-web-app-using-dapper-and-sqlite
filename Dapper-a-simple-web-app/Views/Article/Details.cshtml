@@ -1,0 +1,11 @@
+﻿@model Article
+@{
+	ViewData["Title"] = "Home Page";
+}
+<div class="row">
+	<div class="col-xs-12">
+		<h2>@Model.Title</h2>
+		<p>By @Model.AuthorId on @Model.Date</p>
+		<pre>@Model.Body</pre>
+	</div>
+</div>

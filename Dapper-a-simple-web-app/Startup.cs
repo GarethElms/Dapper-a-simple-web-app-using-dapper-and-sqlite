@@ -47,6 +47,10 @@ namespace Dapper_SimpleWebApp
 			app.UseMvc(routes =>
 			{
 				routes.MapRoute(
+						 name: "article",
+						 template: "{controller=Article}/{id:int}",
+						 defaults: new {action="Index"});
+				routes.MapRoute(
 						 name: "default",
 						 template: "{controller=Home}/{action=Index}/{id?}");
 			});

@@ -12,14 +12,17 @@
 		<div class="container">
 			<div xclass="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
-					<li><a style="padding-left:0;" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-					<li><a asp-area="" asp-controller="Articles" asp-action="Index">Articles</a></li>
-					<li><a asp-area="" asp-controller="Authors" asp-action="Index">Authors</a></li>
+					<li><a style="padding-left:0;" asp-controller="Home" asp-action="Index">Home</a></li>
+					<li><a asp-controller="Article" asp-action="List">Articles</a></li>
+					<li><a asp-controller="Author" asp-action="List">Authors</a></li>
 				</ul>
 			</div>
 		</div>
 	</nav>
 	<div class="container body-content">
+		@if(TempData["Message_Success"] != null) {
+			<div style="color:darkgreen; background-color:darkseagreen; font-weight:bold; padding:5px 15px; margin:10px 0;">@TempData["Message_Success"]</div>
+		}
 		@RenderBody()
 		<hr />
 		<footer>
