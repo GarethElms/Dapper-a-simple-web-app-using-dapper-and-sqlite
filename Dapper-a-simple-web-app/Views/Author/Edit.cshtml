@@ -1,0 +1,22 @@
+﻿@model Author
+@{
+	ViewData["Title"] = "Home Page";
+}
+<div class="row">
+	<div class="col-xs-12">
+		<h2>Edit</h2>
+		<form method="POST">
+			<div class="form-group">
+				<label for="name">Name</label>
+				<input type="text" class="form-control" id="name" name="name" placeholder="Name" value="@Model.Name">
+			</div>
+			<input type="hidden" name="id" value="@Model.Id" />
+			<button type="submit" class="btn btn-default">Submit</button>
+
+			@if(Model.Id > 0) {
+			<button type="submit" name="delete" class="btn btn-danger">Delete</button>
+			}
+		</form>
+
+	</div>
+</div>

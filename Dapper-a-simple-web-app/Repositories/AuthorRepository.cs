@@ -19,9 +19,31 @@ namespace Dapper_SimpleWebApp
 
 		public Author RetrieveById(int authorId)
 		{
-			var author = _connection.Query<Author>("select * from author where id=@id", new {Id = authorId}).SingleOrDefault();
+			//var result = _connection.Query<Author>("select * from author where id=@id", new {Id = authorId}).SingleOrDefault();
+			var authors = new Dictionary<long, Author>();
 
-			return author;
+			var result = _connection.Query<Author, Article, Author>(
+				"select * from author  join article on article.authorid=author.id where author.id=@Id",
+				(author, article) => {
+					if(!authors.ContainsKey(author.Id))
+					{
+						authors[author.Id] = author;
+						author.Articles = new List<Article>();
+					}
+					else
+					{
+						author = authors[author.Id];
+					}
+					author.Articles.Add(article); return author;
+				},
+				new {Id = authorId});
+
+			if(authors.Count == 1)
+			{
+				return authors[authorId];
+			}
+			return null;
+
 			/*return _database.Fetch<Article, Author, Tag, Article>(
 				new ArticleRelator().Map,
 				"select * from article " + 
@@ -52,6 +74,16 @@ namespace Dapper_SimpleWebApp
 
 		public bool Delete(Author author)
 		{
+			/*
+			using( var scope = _database.GetTransaction())
+			{
+				_database.Execute( "delete from articleTag where articleTag.articleId in (select id from article where article.author_id=@0)", authorId);
+				_database.Execute( "delete from article where author_id=@0", authorId);
+				_database.Execute( "delete from author where id=@0", authorId);
+
+				scope.Complete();
+			}
+			*/
 			return _connection.Delete(author);
 		}
 	}

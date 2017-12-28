@@ -1,0 +1,21 @@
+﻿@model Author
+@{
+	ViewData["Title"] = "Home Page";
+}
+<div class="row">
+	<div class="col-xs-12">
+		<h2>@Model.Name</h2>
+
+		@if(Model.Articles != null) {
+		<p>All articles by @Model.Name</p>
+		<ul>
+			@foreach(var article in Model.Articles)
+			{
+				<li>
+					<a href="/article/@article.Id">@article.Title</a>
+				</li>
+			}
+		</ul>
+		}
+	</div>
+</div>

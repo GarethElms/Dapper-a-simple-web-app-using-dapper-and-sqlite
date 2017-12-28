@@ -35,7 +35,9 @@
 			</div>
 			<input type="hidden" name="Article.id" value="@Model.Article.Id" />
 			<button type="submit" class="btn btn-default">Submit</button>
+			@if(Model.Article.Id > 0) {
 			<button type="submit" name="delete" class="btn btn-danger">Delete</button>
+			}
 		</form>
 
 	</div>
