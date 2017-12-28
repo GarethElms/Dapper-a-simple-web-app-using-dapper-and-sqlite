@@ -63,5 +63,10 @@ namespace Dapper_SimpleWebApp
 			}
 			return true;
 		}
+
+		public bool Delete(Article article)
+		{
+			return _connection.Delete(article);
+		}
 	}
 }

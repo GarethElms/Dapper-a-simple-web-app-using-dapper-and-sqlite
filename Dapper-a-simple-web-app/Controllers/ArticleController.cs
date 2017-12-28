@@ -11,6 +11,7 @@ namespace Dapper_SimpleWebApp.Controllers
 {
 	public class ArticleController : Controller
 	{
+
 		public IActionResult Index(int id)
 		{
 			var repo = new ArticleRepository();
@@ -26,6 +27,10 @@ namespace Dapper_SimpleWebApp.Controllers
 			var authorRepo = new AuthorRepository();
 
 			viewModel.Article = articleRepo.RetrieveById(id);
+			if(viewModel.Article == null)
+			{
+				viewModel.Article = new Article();
+			}
 			var authors = authorRepo.FetchAll();
 			viewModel.Authors = new List<SelectListItem>();
 			foreach(var author in authors)
@@ -40,12 +45,20 @@ namespace Dapper_SimpleWebApp.Controllers
 		public IActionResult Edit(Article article)
 		{
 			var repo = new ArticleRepository();
-			if(repo.Save(article))
+			if(HttpContext.Request.Form.ContainsKey("delete"))
+			{
+				if(repo.Delete(article))
+				{
+					TempData["Message_Success"] = "Article was deleted";
+					return RedirectToAction("List", "Article");
+				}
+			}
+			else if(repo.Save(article))
 			{
 				TempData["Message_Success"] = "Article was saved";
 			}
 
-			return RedirectToAction("Edit");
+			return RedirectToAction("Edit", new {id=article.Id});
 		}
 
 		public IActionResult List()

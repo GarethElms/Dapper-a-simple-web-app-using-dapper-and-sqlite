@@ -12,7 +12,7 @@ namespace Dapper_SimpleWebApp.Models
 		public string Title { get; set; }
 		public string Body { get; set; }
 
-		[DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+		//[DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
 		public DateTime Date { get; set; }
 
 		//[ResultColumn]
