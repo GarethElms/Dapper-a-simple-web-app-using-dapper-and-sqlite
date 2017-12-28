@@ -33,9 +33,54 @@ namespace Dapper_SimpleWebApp
 		}
 		public Article RetrieveById(int articleId)
 		{
-			var article = _connection.Query<Article>("select * from article where id=@id", new {Id = articleId}).SingleOrDefault();
+			var articles = new Dictionary<long, Article>();
 
-			return article;
+			// NOTE: I had to create an ArticleTag record because Dapper looks at each joined table in turn and tries to
+			// to map it, regardless of whether I only return the columns I want. I do nothing with the articleTag data
+			// as I only need the associated tag data itself.
+			var result = _connection.Query<Article, Author, ArticleTag, Tag, Article>(
+				@"select * from article
+					left join author on article.authorid = author.id
+					left join articleTag on articleTag.articleId = article.id
+					left join tag on tag.id = articleTag.tagId
+					where article.id = @Id",
+				(article, author, articleTag, tag) => {
+					if(!articles.ContainsKey(article.Id))
+					{
+						article.Author = author; // Only one author, they'll all be the same one so just reference it the first time.
+						if(tag != null && article.Tags == null)
+						{
+							article.Tags = new List<Tag>();
+						}
+						articles[article.Id] = article;
+					}
+					else
+					{
+						article = articles[article.Id];
+					}
+					if(tag != null)
+					{
+						article.Tags.Add(tag);
+					}
+					return article;
+				},
+				new {Id = articleId});
+			if(articles.Count > 0)
+			{
+				return articles[articleId];
+			}
+			return null;
+
+			/*var result = _connection.Query<Article, Author, Article>("select * from article left join author on article.authorid = author.id where article.id=@id",
+				(article, author) =>
+				{
+					article.Author = author;
+					return article;
+				},
+				new {Id = articleId}).SingleOrDefault();
+
+			return result;
+			*/
 			/*return _database.Fetch<Article, Author, Tag, Article>(
 				new ArticleRelator().Map,
 				"select * from article " + 
@@ -47,8 +92,55 @@ namespace Dapper_SimpleWebApp
 
 		public List<Article> FetchAll()
 		{
-			var articles = _connection.Query<Article>("select * from article order by date desc").ToList();
-			return articles;
+			//var articles = _connection.Query<Article>("select * from article order by date desc").ToList();
+
+			// TODO: Retrieve tags
+
+			var articles = new Dictionary<long, Article>();
+
+			// NOTE: I had to create an ArticleTag record because Dapper looks at each joined table in turn and tries to
+			// to map it, regardless of whether I only return the columns I want. I do nothing with the articleTag data
+			// as I only need the associated tag data itself.
+			var result = _connection.Query<Article, Author, ArticleTag, Tag, Article>(
+				@"select * from article
+					left join author on article.authorid = author.id
+					left join articleTag on articleTag.articleId = article.id
+					left join tag on tag.id = articleTag.tagId",
+				(article, author, articleTag, tag) => {
+					if(!articles.ContainsKey(article.Id))
+					{
+						article.Author = author; // Only one author, they'll all be the same one so just reference it the first time.
+						if(tag != null && article.Tags == null)
+						{
+							article.Tags = new List<Tag>();
+						}
+						articles[article.Id] = article;
+					}
+					else
+					{
+						article = articles[article.Id];
+					}
+					if(tag != null)
+					{
+						article.Tags.Add(tag);
+					}
+					return article;
+				});
+			if(articles.Count > 0)
+			{
+				return articles.Values.ToList();
+			}
+
+			return null;
+
+			/*var result = _connection.Query<Article, Author, Article>("select * from article left join author on article.authorid = author.id",
+				(article, author) =>
+				{
+					article.Author = author;
+					return article;
+				});
+
+			return result.ToList();*/
 		}
 
 		public bool Save(Article article)

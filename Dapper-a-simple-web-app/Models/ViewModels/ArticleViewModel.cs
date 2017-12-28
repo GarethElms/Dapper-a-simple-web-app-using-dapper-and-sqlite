@@ -4,9 +4,10 @@ using System.Collections.Generic;
 
 namespace Dapper_SimpleWebApp.Models
 {
-    public class ArticleViewModel
-    {
-        public Article Article { get; set; }
-        public List<SelectListItem> Authors {get;set;}
-    }
+	public class ArticleViewModel
+	{
+		public Article Article { get; set; }
+		public List<SelectListItem> Authors { get; set; }
+		public List<Tag> AllTags {get;set;}
+	}
 }

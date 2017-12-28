@@ -2,6 +2,7 @@
 @{
 	ViewData["Title"] = "Home Page";
 }
+
 <div class="row">
 	<div class="col-xs-12">
 		<h2>Articles</h2>
@@ -11,6 +12,7 @@
 				<tr>
 					<th>Title</th>
 					<th>Author</th>
+					<th>Tags</th>
 					<th>Published</th>
 					<th>Id</th>
 					<th></th>
@@ -23,7 +25,8 @@
 					@*<a asp-controller="Article" asp-action="" asp-all-route-data='@new Dictionary<string, string>{{"id", article.Id.ToString()}};'>@article.Title</a>*@
 					<a href="/article/@article.Id">@article.Title</a>
 				</td>
-				<td>@article.AuthorId</td>
+				<td>@article.Author.Name</td>
+				<td>@article.TagsCSV()</td>
 				<td>@article.Date</td>
 				<td>@article.Id</td>
 				<td>

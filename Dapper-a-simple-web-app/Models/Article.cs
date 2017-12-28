@@ -1,7 +1,9 @@
 using Dapper.Contrib.Extensions;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace Dapper_SimpleWebApp.Models
 {
@@ -11,24 +13,31 @@ namespace Dapper_SimpleWebApp.Models
 		public long Id { get; set; }
 		public string Title { get; set; }
 		public string Body { get; set; }
-
-		//[DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
 		public DateTime Date { get; set; }
 
-		//[ResultColumn]
-		//public Author Author { get; set; }
+		///[Computed]
+		public Author Author { get; set; }
+
+		//[Computed]
+		public List<Tag> Tags { get; set; }
 
 		[DisplayName("Author")]
 		public int AuthorId { get; set; }
-
-		//[ResultColumn]
-		//public List<Tag> Tags { get; set; }
 
 		public Article()
 		{
 			Date = DateTime.Now;
 			Id = 0;
-			//Tags = new List<Tag>();
+		}
+
+		public string TagsCSV()
+		{
+			if(Tags != null && Tags.Count > 0)
+			{
+				var csv = String.Join(", ", Tags.Select(tag => tag.Name).ToArray());
+				return csv;
+			}
+			return "";
 		}
 	}
 }

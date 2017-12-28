@@ -49,14 +49,6 @@ namespace Dapper_SimpleWebApp
 				return authors[authorId];
 			}
 			return null;
-
-			/*return _database.Fetch<Article, Author, Tag, Article>(
-				new ArticleRelator().Map,
-				"select * from article " + 
-				"join author on author.id = article.author_id " +
-				"left outer join articleTag on articleTag.articleId = article.id " + 
-				"left outer join tag on tag.id=articleTag.tagId " + 
-				"where article.id=@0 ", articleId).Single();*/
 		}
 
 		public List<Author> FetchAll()

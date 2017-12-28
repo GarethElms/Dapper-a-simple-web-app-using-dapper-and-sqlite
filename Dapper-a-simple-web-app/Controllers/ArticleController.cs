@@ -25,6 +25,7 @@ namespace Dapper_SimpleWebApp.Controllers
 			var viewModel = new ArticleViewModel();
 			var articleRepo = new ArticleRepository();
 			var authorRepo = new AuthorRepository();
+			var tagRepo = new TagRepository();
 
 			viewModel.Article = articleRepo.RetrieveById(id);
 			if(viewModel.Article == null)
@@ -37,6 +38,7 @@ namespace Dapper_SimpleWebApp.Controllers
 			{
 				viewModel.Authors.Add(new SelectListItem(){Value=author.Id.ToString(), Text=author.Name});
 			}
+			viewModel.AllTags = tagRepo.FetchAll();
 
 			return View(viewModel);
 		}
