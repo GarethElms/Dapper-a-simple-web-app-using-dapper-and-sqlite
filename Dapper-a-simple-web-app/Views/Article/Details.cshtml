@@ -9,11 +9,10 @@
 		@if(Model.Tags != null) {
 			<p>
 				<span class="glyphicon glyphicon-tag"></span>
-				<span>@Model.TagsCSV()</span>
+				<span>@Model.TagsForDisplay()</span>
 			</p>
 		}
 		<pre>@Model.Body</pre>
 
-		
 	</div>
 </div>

@@ -15,10 +15,10 @@ namespace Dapper_SimpleWebApp.Models
 		public string Body { get; set; }
 		public DateTime Date { get; set; }
 
-		///[Computed]
+		[Computed]
 		public Author Author { get; set; }
 
-		//[Computed]
+		[Computed]
 		public List<Tag> Tags { get; set; }
 
 		[DisplayName("Author")]
@@ -30,7 +30,10 @@ namespace Dapper_SimpleWebApp.Models
 			Id = 0;
 		}
 
-		public string TagsCSV()
+		[Computed]
+		public string TagsCSV {get;set;}
+
+		public string TagsForDisplay()
 		{
 			if(Tags != null && Tags.Count > 0)
 			{

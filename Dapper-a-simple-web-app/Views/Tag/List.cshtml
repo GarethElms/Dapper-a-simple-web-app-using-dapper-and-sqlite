@@ -1,0 +1,32 @@
+﻿@model List<Tag>
+@{
+	ViewData["Title"] = "Home Page";
+}
+
+<div class="row">
+	<div class="col-xs-12">
+		<h2>Tags</h2>
+		@if(Model.Count > 0) {
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Tag</th>
+					<th>Count</th>
+				</tr>
+			</thead>
+			
+			@foreach(var tag in Model) {
+			<tr>
+				<td>
+					<a asp-controller="Tag" asp-action="articles" asp-all-route-data='@new Dictionary<string, string>{{"id", tag.Id.ToString()}};'>@tag.Name</a>
+				</td>
+				<td>@tag.Count</td>
+			</tr>
+			}
+		</table>
+		} else {
+			<p>There are no tags yet</p>
+		}
+
+	</div>
+</div>

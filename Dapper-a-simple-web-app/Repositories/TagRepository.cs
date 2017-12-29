@@ -19,7 +19,11 @@ namespace Dapper_SimpleWebApp
 
 		public List<Tag> FetchAll()
 		{
-			var result = _connection.Query<Tag>("select * from tag");
+			var result =
+				_connection.Query<Tag>(
+					@"select tag.*, count(articleTag.tagId) as count from tag left join articleTag on articleTag.tagId = tag.id
+						group by articleTag.tagId
+						order by tag.name asc");
 			if(result != null)
 			{
 				return result.ToList();

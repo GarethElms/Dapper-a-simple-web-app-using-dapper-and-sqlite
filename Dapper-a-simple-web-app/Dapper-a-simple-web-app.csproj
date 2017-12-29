@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <Folder Include="ViewComponents\" />
+    <Folder Include="wwwroot\js\bootstrap-tagsinput\" />
   </ItemGroup>
 
 </Project>

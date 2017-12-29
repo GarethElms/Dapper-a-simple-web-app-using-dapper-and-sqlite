@@ -5,6 +5,7 @@ using Dapper;
 using System.Linq;
 using System.Collections.Generic;
 using Dapper.Contrib.Extensions;
+using System;
 
 namespace Dapper_SimpleWebApp
 {
@@ -70,42 +71,28 @@ namespace Dapper_SimpleWebApp
 				return articles[articleId];
 			}
 			return null;
-
-			/*var result = _connection.Query<Article, Author, Article>("select * from article left join author on article.authorid = author.id where article.id=@id",
-				(article, author) =>
-				{
-					article.Author = author;
-					return article;
-				},
-				new {Id = articleId}).SingleOrDefault();
-
-			return result;
-			*/
-			/*return _database.Fetch<Article, Author, Tag, Article>(
-				new ArticleRelator().Map,
-				"select * from article " + 
-				"join author on author.id = article.author_id " +
-				"left outer join articleTag on articleTag.articleId = article.id " + 
-				"left outer join tag on tag.id=articleTag.tagId " + 
-				"where article.id=@0 ", articleId).Single();*/
 		}
 
-		public List<Article> FetchAll()
+		public List<Article> FetchAll(int? tagId = null)
 		{
-			//var articles = _connection.Query<Article>("select * from article order by date desc").ToList();
-
-			// TODO: Retrieve tags
-
 			var articles = new Dictionary<long, Article>();
 
 			// NOTE: I had to create an ArticleTag record because Dapper looks at each joined table in turn and tries to
 			// to map it, regardless of whether I only return the columns I want. I do nothing with the articleTag data
-			// as I only need the associated tag data itself.
-			var result = _connection.Query<Article, Author, ArticleTag, Tag, Article>(
-				@"select * from article
+			// here as I only need the associated tag data itself.
+			var sql = @"select * from article
 					left join author on article.authorid = author.id
 					left join articleTag on articleTag.articleId = article.id
-					left join tag on tag.id = articleTag.tagId",
+					left join tag on tag.id = articleTag.tagId";
+			object parameters = null;
+			if(tagId != null)
+			{
+				sql += " where tag.id=@tagId";
+				parameters = new {tagId = tagId.Value};
+			}
+
+			var result = _connection.Query<Article, Author, ArticleTag, Tag, Article>(
+				sql,
 				(article, author, articleTag, tag) => {
 					if(!articles.ContainsKey(article.Id))
 					{
@@ -125,22 +112,14 @@ namespace Dapper_SimpleWebApp
 						article.Tags.Add(tag);
 					}
 					return article;
-				});
+				}, parameters);
+
 			if(articles.Count > 0)
 			{
 				return articles.Values.ToList();
 			}
 
 			return null;
-
-			/*var result = _connection.Query<Article, Author, Article>("select * from article left join author on article.authorid = author.id",
-				(article, author) =>
-				{
-					article.Author = author;
-					return article;
-				});
-
-			return result.ToList();*/
 		}
 
 		public bool Save(Article article)
@@ -152,7 +131,32 @@ namespace Dapper_SimpleWebApp
 			else
 			{
 				_connection.Update<Article>(article);
+				_connection.Execute("delete from articleTag where articleId=@articleId", new {articleId=article.Id});
 			}
+
+			if(!string.IsNullOrEmpty(article.TagsCSV))
+			{
+				var tagsAsArray = article.TagsCSV.Split(",", StringSplitOptions.RemoveEmptyEntries);
+				long tagId = 0;
+				foreach(var tag in tagsAsArray)
+				{
+					var trimmedTag = tag.Trim();
+					// Create a tag record if this tag doesn't already exist.
+					var existingTag = _connection.Query<Tag>("select * from tag where name=@tag", new{tag=trimmedTag}).FirstOrDefault();
+					tagId = 0;
+					if(existingTag == null)
+					{
+						tagId = _connection.Insert<Tag>(new Tag(){Name=trimmedTag});
+					}
+					else
+					{
+						tagId = existingTag.Id;
+					}
+					// Now associate the tag with this article
+					_connection.Insert<ArticleTag>(new ArticleTag(){ArticleId=article.Id, TagId=tagId});
+				}
+			}
+
 			return true;
 		}
 

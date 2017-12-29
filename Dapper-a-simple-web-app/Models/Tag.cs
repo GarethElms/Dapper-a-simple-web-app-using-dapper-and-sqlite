@@ -13,6 +13,9 @@ namespace Dapper_SimpleWebApp.Models
 		public string Name { get; set; }
 
 		[Computed]
+		public int Count {get;set;}
+
+		[Computed]
 		public List<Article> Articles {get;set;}
 		
 		public Tag()

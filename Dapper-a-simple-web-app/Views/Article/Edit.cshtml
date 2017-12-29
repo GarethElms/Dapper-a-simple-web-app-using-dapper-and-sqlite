@@ -20,9 +20,9 @@
 			</div>
 			<div class="form-group">
 				<label for="tags">Tags</label>
-				<div id="tag-container"></div>
-				<input id="add-tag" class="form-control" style="float:left;" />
-				<input type="hidden" name="Article.Tags" id="Article.Tags" />
+				<div id="tag-container">
+					<input class="form-control" type="text" name="Article.TagsCSV" id="Article.TagsCSV" value="@Model.Article.TagsForDisplay()" placeholder="Separate tags with a comma" />
+				</div>
 			</div>
 			<div class="form-group" style="clear:both;">
 				<label for="body">Body</label>
@@ -37,47 +37,3 @@
 
 	</div>
 </div>
-
-@section Scripts
-{
-<script>
-	var APP = {};
-	APP.selectedTags = [];
-	@if(Model.Article.Tags != null && Model.Article.Tags.Count > 0) {
-		foreach(var tag in Model.Article.Tags) {
-	<text>
-	APP.selectedTags.push(@tag.Id);
-	</text>
-		}
-	}
-	APP.allTags = [];
-	@if(Model.AllTags != null && Model.AllTags.Count > 0) {
-		foreach(var tag in Model.AllTags) {
-	<text>
-	APP.allTags.push({id:@tag.Id, name:"@tag.Name"});
-	</text>
-		}
-	}
-	function addTag(tag) {
-		APP.$tagcontainer.append("<div class='tag'>" + tag + "</div>");
-	}
-
-	function redrawTags() {
-		for(var i=0, count=APP.selectedTags.length; i<count; i++) {
-			addTag(APP.selectedTags[i]);
-		}
-	}
-
-	$(document).ready(function () {
-		APP.$tags = $("#tags");
-		APP.$tagcontainer = $("#tag-container");
-		APP.$tags.empty();
-		redrawTags();
-	});
-</script>
-}
-
-<style>
-#tag-container {margin:10px 0 10px;}
-.tag {padding:2px 20px 2px 5px; border:1px solid #aaa; float:left; margin-right:10px; border-radius:4px;}
-</style>
