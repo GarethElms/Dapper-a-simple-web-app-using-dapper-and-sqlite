@@ -5,7 +5,7 @@
 <div class="row">
 	<div class="col-xs-12">
 		<h2>@Model.Article.Title</h2>
-		<form method="POST">
+		<form method="POST" id="edit-article">
 			<div class="form-group">
 				<label for="title">Title</label>
 				<input type="text" class="form-control" id="title" name="Article.Title" placeholder="Title" value="@Model.Article.Title">
@@ -26,7 +26,8 @@
 			</div>
 			<div class="form-group" style="clear:both;">
 				<label for="body">Body</label>
-				<textarea name="Article.Body" id="body" class="form-control">@Model.Article.Body</textarea>
+				<textarea name="Article.Body" id="body" class="form-control" style="height:150px; display:none;"></textarea>
+				<div id="summernote">@Html.Raw(Model.Article.Body)</div>
 			</div>
 			<input type="hidden" name="Article.id" value="@Model.Article.Id" />
 			<button type="submit" class="btn btn-default">Submit</button>
@@ -34,6 +35,24 @@
 			<button type="submit" name="delete" class="btn btn-danger">Delete</button>
 			}
 		</form>
-
 	</div>
 </div>
+
+@section Head
+{
+}
+
+@section Scripts
+{
+	<link href="/js/summernote/summernote.css" rel="stylesheet">
+	<script src="/js/summernote/summernote.js"></script>
+	<script>
+	$(document).ready(function () {
+		$("#summernote").summernote({height:200});
+	});
+	$("#edit-article").submit(function () {
+		$("#body").val($("#summernote").summernote("code"));
+		return true;
+	});
+	</script>
+}

@@ -5,14 +5,18 @@
 <div class="row">
 	<div class="col-xs-12">
 		<h2>@Model.Title</h2>
-		<p>By @Model.Author.Name on @Model.Date</p>
-		@if(Model.Tags != null) {
-			<p>
+		<p>
+			By @Model.Author.Name on @Model.Date
+		</p>
+		<hr />
+		<div style="">@Html.Raw(Model.Body)</div>
+		<hr />
+		@if(Model.Tags != null)
+		{
+			<span style="font-size:85%;">
 				<span class="glyphicon glyphicon-tag"></span>
 				<span>@Model.TagsForDisplay()</span>
-			</p>
+			</span>
 		}
-		<pre>@Model.Body</pre>
-
 	</div>
 </div>

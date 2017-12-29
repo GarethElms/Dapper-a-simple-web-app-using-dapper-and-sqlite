@@ -5,14 +5,22 @@
 	<div class="col-xs-12">
 		<h2>Dapper - A simple web app</h2>
 		<p>
-			A simple application to manage authors and their articles. Authors have a many-to-one relationship with articles.
-			Articles must have an author associated with them. If you delete an author all his articles are also deleted.
-			Use <a href="~/glimpse/config">Glimpse</a> to track the SQL being sent to the database
+			A simple application to manage authors and their articles in an SQLite database using <a href="https://github.com/StackExchange/Dapper">Dapper</a>.
 		</p>
 		<ul>
 			<li><a asp-area="" asp-controller="Article" asp-action="List">Articles</a></li>
 			<li><a asp-area="" asp-controller="Author" asp-action="List">Authors</a></li>
 			<li><a asp-area="" asp-controller="Tag" asp-action="List">Tags</a></li>
 		</ul>
+		<p>
+			Authors have a one-to-many relationship with articles. Articles have a many-to-many relationship with tags via the <em>articleTag</em> and <em>tag</em> tables.
+		</p>
+		<p>
+			Download <a href="http://sqlitebrowser.org/" >SQLite Browser</a> and look at the <em>app.db</em> database in the project root.
+		</p>
+		<h3>Database Schema</h3>
+		<p>
+			<img class="img-responsive" src="~/images/SQLite-db-schema.jpg" title="The database schema for this app's SQLite database" style="border:1px solid #ddd;" />
+		</p>
 	</div>
 </div>

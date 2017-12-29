@@ -22,7 +22,7 @@ namespace Dapper_SimpleWebApp.Controllers
 		public IActionResult Articles(int id)
 		{
 			var repo = new ArticleRepository();
-			var articles = repo.FetchAll(tagId:id);
+			var articles = repo.Fetch(tagId:id);
 
 			return View("~/views/article/list.cshtml", articles);
 		}

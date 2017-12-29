@@ -10,10 +10,11 @@ namespace Dapper_SimpleWebApp
 {
 	public class TagRepository : BaseRepository
 	{
-		private IDbConnection _connection { get { return new SQLiteConnection(_connectionString); } }
+		private IDbConnection _connection;
 
 		public TagRepository()
 		{
+			_connection = new SQLiteConnection(_connectionString);
 			_connection.Open();
 		}
 

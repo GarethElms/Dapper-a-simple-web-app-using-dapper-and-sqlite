@@ -32,7 +32,7 @@ namespace Dapper_SimpleWebApp.Controllers
 			{
 				viewModel.Article = new Article();
 			}
-			var authors = authorRepo.FetchAll();
+			var authors = authorRepo.Fetch();
 			viewModel.Authors = new List<SelectListItem>();
 			foreach(var author in authors)
 			{
@@ -66,7 +66,7 @@ namespace Dapper_SimpleWebApp.Controllers
 		public IActionResult List()
 		{
 			var repo = new ArticleRepository();
-			var articles = repo.FetchAll();
+			var articles = repo.Fetch();
 
 			return View(articles);
 		}

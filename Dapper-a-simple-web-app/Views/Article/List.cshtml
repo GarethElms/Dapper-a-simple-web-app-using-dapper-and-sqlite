@@ -35,17 +35,13 @@
 			</tr>
 			}
 			<tr>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td><a asp-controller="Article" asp-action="Edit">Create new article</a></td>
+				<td colspan="99" style="padding-top:20px;"><a asp-controller="Article" asp-action="Edit"><span class="glyphicon glyphicon-plus"></span> Create new article</a></td>
 			</tr>
 		</table>
 		} else {
 			<p>There are no articles yet</p>
 			<p>
-				<a asp-controller="Article" asp-action="Edit">Create new article</a>
+				<a asp-controller="Article" asp-action="Edit"><span class="glyphicon glyphicon-plus"></span> Create new article</a>
 			</p>
 		}
 

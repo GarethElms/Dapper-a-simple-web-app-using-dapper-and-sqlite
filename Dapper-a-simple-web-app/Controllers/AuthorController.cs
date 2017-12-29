@@ -54,7 +54,7 @@ namespace Dapper_SimpleWebApp.Controllers
 		public IActionResult List()
 		{
 			var repo = new AuthorRepository();
-			var articles = repo.FetchAll();
+			var articles = repo.Fetch();
 
 			return View(articles);
 		}

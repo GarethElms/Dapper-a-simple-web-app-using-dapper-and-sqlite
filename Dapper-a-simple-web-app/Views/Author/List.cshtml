@@ -29,16 +29,15 @@
 			</tr>
 			}
 			<tr>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td><a asp-controller="Author" asp-action="Edit">Create new author</a></td>
+				<td colspan="99" style="padding-top:20px;">
+					<a asp-controller="Author" asp-action="Edit"><span class="glyphicon glyphicon-plus"></span> Create new author</a>
+				</td>
 			</tr>
 		</table>
 		} else {
 			<p>There are no authors yet</p>
 			<p>
-				<a asp-controller="Author" asp-action="Edit">Create new author</a>
+				<a asp-controller="Author" asp-action="Edit"><span class="glyphicon glyphicon-plus"></span> Create new author</a>
 			</p>
 		}
 
