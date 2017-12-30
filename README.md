@@ -2,6 +2,8 @@
 
 Here's a simple ASP.NET Core web app using [Dapper](https://github.com/StackExchange/Dapper) to access a [SQLite](https://www.sqlite.org) database containing authors, articles and tags associated with the articles.
 
+Here's a [short video](https://www.youtube.com/watch?v=2VO-GtiH63E) showing the web app running.
+
 I wanted to figure out how to use Dapper to fetch data in a many-to-many relationship. The tags are stored centrally in the tag table. The many-to-many relationship between tags and articles is managed through the articleTag table which links tag records to article records.
 
 This is the entire SQLite database schema :
