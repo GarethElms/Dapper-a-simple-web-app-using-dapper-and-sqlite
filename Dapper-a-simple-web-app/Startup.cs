@@ -25,8 +25,9 @@ namespace Dapper_SimpleWebApp
 		{
 			services.AddMvc();
 
-			/*IDbConnection connection = new SQLiteConnection("Data Source=app.db");
-			connection.Open();*/
+			services.AddTransient<IAuthorRepository, AuthorRepository>();
+			services.AddTransient<IArticleRepository, ArticleRepository>();
+			services.AddTransient<ITagRepository, TagRepository>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -11,11 +11,18 @@ namespace Dapper_SimpleWebApp.Controllers
 {
 	public class ArticleController : Controller
 	{
+		private IArticleRepository _articleRepository;
+		private IAuthorRepository _authorRepository;
+
+		public ArticleController(IArticleRepository articleRepository, IAuthorRepository authorRepository)
+		{
+			_articleRepository = articleRepository;
+			_authorRepository = authorRepository;
+		}
 
 		public IActionResult Index(int id)
 		{
-			var repo = new ArticleRepository();
-			var article = repo.RetrieveById(id);
+			var article = _articleRepository.RetrieveById(id);
 
 			return View("Details", article);
 		}
@@ -23,16 +30,14 @@ namespace Dapper_SimpleWebApp.Controllers
 		public IActionResult Edit(int id)
 		{
 			var viewModel = new ArticleViewModel();
-			var articleRepo = new ArticleRepository();
-			var authorRepo = new AuthorRepository();
 			var tagRepo = new TagRepository();
 
-			viewModel.Article = articleRepo.RetrieveById(id);
+			viewModel.Article = _articleRepository.RetrieveById(id);
 			if(viewModel.Article == null)
 			{
 				viewModel.Article = new Article();
 			}
-			var authors = authorRepo.Fetch();
+			var authors = _authorRepository.Fetch();
 			viewModel.Authors = new List<SelectListItem>();
 			foreach(var author in authors)
 			{
@@ -46,16 +51,15 @@ namespace Dapper_SimpleWebApp.Controllers
 		[HttpPost]
 		public IActionResult Edit(Article article)
 		{
-			var repo = new ArticleRepository();
 			if(HttpContext.Request.Form.ContainsKey("delete"))
 			{
-				if(repo.Delete(article))
+				if(_articleRepository.Delete(article))
 				{
 					TempData["Message_Success"] = "Article was deleted";
 					return RedirectToAction("List", "Article");
 				}
 			}
-			else if(repo.Save(article))
+			else if(_articleRepository.Save(article))
 			{
 				TempData["Message_Success"] = "Article was saved";
 			}
@@ -65,8 +69,7 @@ namespace Dapper_SimpleWebApp.Controllers
 
 		public IActionResult List()
 		{
-			var repo = new ArticleRepository();
-			var articles = repo.Fetch();
+			var articles = _articleRepository.Fetch();
 
 			return View(articles);
 		}

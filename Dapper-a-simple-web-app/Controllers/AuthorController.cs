@@ -11,19 +11,23 @@ namespace Dapper_SimpleWebApp.Controllers
 {
 	public class AuthorController : Controller
 	{
+		private IAuthorRepository _authorRepository;
+
+		public AuthorController(IAuthorRepository authorRepository)
+		{
+			_authorRepository = authorRepository;
+		}
 
 		public IActionResult Details(int id)
 		{
-			var repo = new AuthorRepository();
-			var author = repo.RetrieveById(id);
+			var author = _authorRepository.RetrieveById(id);
 
 			return View("Details", author);
 		}
 
 		public IActionResult Edit(int id)
 		{
-			var authorRepo = new AuthorRepository();
-			var author = authorRepo.RetrieveById(id);
+			var author = _authorRepository.RetrieveById(id);
 			if(author == null)
 			{
 				author = new Author();
@@ -34,16 +38,15 @@ namespace Dapper_SimpleWebApp.Controllers
 		[HttpPost]
 		public IActionResult Edit(Author author)
 		{
-			var repo = new AuthorRepository();
 			if(HttpContext.Request.Form.ContainsKey("delete"))
 			{
-				if(repo.Delete(author))
+				if(_authorRepository.Delete(author))
 				{
 					TempData["Message_Success"] = "Author was deleted";
 					return RedirectToAction("List", "Author");
 				}
 			}
-			else if(repo.Save(author))
+			else if(_authorRepository.Save(author))
 			{
 				TempData["Message_Success"] = "Author was saved";
 			}
@@ -53,8 +56,7 @@ namespace Dapper_SimpleWebApp.Controllers
 
 		public IActionResult List()
 		{
-			var repo = new AuthorRepository();
-			var articles = repo.Fetch();
+			var articles = _authorRepository.Fetch();
 
 			return View(articles);
 		}

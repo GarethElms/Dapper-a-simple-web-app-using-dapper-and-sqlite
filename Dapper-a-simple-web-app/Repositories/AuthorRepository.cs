@@ -10,7 +10,7 @@ using System.Text;
 
 namespace Dapper_SimpleWebApp
 {
-	public class AuthorRepository : BaseRepository
+	public class AuthorRepository : BaseRepository, IAuthorRepository
 	{
 		private IDbConnection _connection;
 

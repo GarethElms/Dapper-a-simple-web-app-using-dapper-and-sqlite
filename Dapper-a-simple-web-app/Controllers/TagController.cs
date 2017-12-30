@@ -11,18 +11,25 @@ namespace Dapper_SimpleWebApp.Controllers
 {
 	public class TagController : Controller
 	{
+		private ITagRepository _tagRepository;
+		private IArticleRepository _articleRepository;
+
+		public TagController(ITagRepository tagRepository, IArticleRepository articleRepository)
+		{
+			_tagRepository = tagRepository;
+			_articleRepository = articleRepository;
+		}
+
 		public IActionResult List()
 		{
-			var repo = new TagRepository();
-			var tags = repo.FetchAll();
+			var tags = _tagRepository.FetchAll();
 
 			return View(tags);
 		}
 
 		public IActionResult Articles(int id)
 		{
-			var repo = new ArticleRepository();
-			var articles = repo.Fetch(tagId:id);
+			var articles = _articleRepository.Fetch(tagId:id);
 
 			return View("~/views/article/list.cshtml", articles);
 		}

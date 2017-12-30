@@ -11,7 +11,7 @@ using System.Text;
 
 namespace Dapper_SimpleWebApp
 {
-	public class ArticleRepository : BaseRepository
+	public class ArticleRepository : BaseRepository, IArticleRepository
 	{
 		private IDbConnection _connection;
 

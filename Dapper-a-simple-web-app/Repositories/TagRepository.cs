@@ -8,7 +8,7 @@ using Dapper.Contrib.Extensions;
 
 namespace Dapper_SimpleWebApp
 {
-	public class TagRepository : BaseRepository
+	public class TagRepository : BaseRepository, ITagRepository
 	{
 		private IDbConnection _connection;
 
